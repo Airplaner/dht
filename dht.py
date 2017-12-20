@@ -110,6 +110,10 @@ class DHT(network.Network, timer.Timer):
                         self.slave_peer_list_updated()
         elif message["type"] == "search":
             logging.info("Client request: search")
+            message = {
+                "type": "test"
+            }
+            self.send_message(message, addr)
             pass
         elif message["type"] == "insert":
             logging.info("Client request: insert")
