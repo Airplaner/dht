@@ -1,16 +1,22 @@
 import asyncio
 import logging
 import network
+import timer
+import time
+import datetime
 logging.getLogger().setLevel("DEBUG")
 
-class CLI(network.Network):
+_TIMEOUT = datetime.timedelta(seconds=3)
+
+class CLI(network.Network, timer.Timer):
     async def start(self):
         message = {
-            "type": "get_leader",
+            "type": "heartbeat_ping",
             "uuid": self.uuid,
         }
         logging.info("cli start send")
         self.send_message(message, (network.NETWORK_BROADCAST_ADDR, network.NETWORK_PORT))
+        self.async_trigger(self.command, _TIMEOUT)
         pass
 
     async def command(self):
@@ -28,12 +34,12 @@ class CLI(network.Network):
         pass
 
     def message_arrived(self, message, addr):
-        if message["type"] == "cli_peer_list":
-            import json
-            self._peer_list = json.loads(message["peer_list"])
-            print(self._peer_list)
-            asyncio.ensure_future(self.command(), loop=self._loop)
+        if message["type"] == "heartbeat_pong":
+            self._peer_list.append((message["uuid"],addr))
             
+
+            
+                
     def __init__(self, loop):
         network.Network.__init__(self, loop)
         self._peer_list = list()
