@@ -50,7 +50,12 @@ class CLI(network.Network, timer.Timer):
                 "key": key,
                 }
             self.send_message(message, (network.NETWORK_BROADCAST_ADDR, network.NETWORK_PORT))
+            self.async_trigger(self.fail, _TIMEOUT)
         pass
+
+    async def fail(self):
+        print("Fail")
+        exit()
 
     def message_arrived(self, message, addr):
         if message["type"] == "heartbeat_pong":
