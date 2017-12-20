@@ -1,7 +1,7 @@
 import asyncio
 import dht
 import logging
-logging.getLogger().setLevel("DEBUG")
+logging.getLogger().setLevel("INFO")
 
 def main():
     loop = asyncio.new_event_loop()
