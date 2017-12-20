@@ -29,7 +29,7 @@ class CLI(network.Network):
 
     def message_arrived(self, message, addr):
         if message["type"] == "cli_peer_list":
-            import json.loads
+            import json
             self._peer_list = json.loads(message["peer_list"])
             print(self._peer_list)
             asyncio.ensure_future(self.command(), loop=self._loop)

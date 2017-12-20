@@ -122,7 +122,7 @@ class DHT(network.Network, timer.Timer):
                 message = {
                     "type": "cli_peer_list",
                     "uuid": self.uuid,
-                    "peer_list": str(self.context.peer_list),
+                    "peer_list": str(self._context.peer_list),
                     }
                 self.send_message(message, addr)
             pass
