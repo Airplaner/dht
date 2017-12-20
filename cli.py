@@ -7,7 +7,7 @@ class CLI(network.Network):
     async def start(self):
         message = {
             "type": "search"
-            "uuid": self.uuid
+            "uuid": self.uuid,
         }
         logging.info("cli start send")
         self.send_message(message, (network.NETWORK_BROADCAST_ADDR, network.NETWORK_PORT))

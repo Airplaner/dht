@@ -112,7 +112,7 @@ class DHT(network.Network, timer.Timer):
             logging.info("Client request: search")
             message = {
                 "type": "test"
-                "uuid": self.uuid
+                "uuid": self.uuid,
             }
             self.send_message(message, addr)
             pass
