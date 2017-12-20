@@ -110,17 +110,21 @@ class DHT(network.Network, timer.Timer):
                         self.slave_peer_list_updated()
         elif message["type"] == "search":
             logging.info("Client request: search")
-            message = {
-                "type": "test",
-                "uuid": self.uuid,
-            }
-            self.send_message(message, addr)
             pass
         elif message["type"] == "insert":
             logging.info("Client request: insert")
             pass
         elif message["type"] == "delete":
             logging.info("Client request: delete")
+            pass
+        elif message["type"] == "get_leader":
+            if self._state == self.State.MASTER:
+                message = {
+                    "type": "cli_peer_list",
+                    "uuid": self.uuid,
+                    "peer_list": str(self.context.peer_list),
+                    }
+                self.send_message(message, addr)
             pass
 
     def master_peer_list_updated(self):

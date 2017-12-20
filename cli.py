@@ -6,17 +6,33 @@ logging.getLogger().setLevel("DEBUG")
 class CLI(network.Network):
     async def start(self):
         message = {
-            "type": "search",
+            "type": "get_leader",
             "uuid": self.uuid,
         }
         logging.info("cli start send")
         self.send_message(message, (network.NETWORK_BROADCAST_ADDR, network.NETWORK_PORT))
         pass
 
+    async def command(self):
+        print(self._peer_list)
+        command = input("connect index:")
+        if command == "insert":
+            key = input("key:")
+            value = input("value:")
+            message = {
+                "type": "insert",
+                "uuid": self.uuid,
+                "key": key,
+                "value": value,
+                }
+        pass
+
     def message_arrived(self, message, addr):
-        if message["type"] == "test":
-            self._peer_list.append(addr)
-            logging.info("test arrived")
+        if message["type"] == "cli_peer_list":
+            import json.loads
+            self._peer_list = json.loads(message["peer_list"])
+            print(self._peer_list)
+            asyncio.ensure_future(self.command(), loop=self._loop)
             
     def __init__(self, loop):
         network.Network.__init__(self, loop)
