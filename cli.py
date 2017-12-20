@@ -24,11 +24,11 @@ class CLI(network.Network, timer.Timer):
     async def command(self):
         if len(self._peer_list) == 0:
             print("Fail to load node info. Restart CLI")
-            return
+            exit()
         for i in self._peer_list:
             print(i)
         command = input("node index:")
-        addr = self._peer_list[int(command)]
+        addr = self._peer_list[int(command)][1]
         
         command = input("command:")
         if command == "insert":
