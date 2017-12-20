@@ -20,8 +20,12 @@ class CLI(network.Network, timer.Timer):
         pass
 
     async def command(self):
-        print(self._peer_list)
-        command = input("connect index:")
+        for i in self._peer_list:
+            print(i)
+        command = input("node index:")
+        addr = self._peer_list[int(command)]
+        
+        command = input("command")
         if command == "insert":
             key = input("key:")
             value = input("value:")
@@ -31,11 +35,26 @@ class CLI(network.Network, timer.Timer):
                 "key": key,
                 "value": value,
                 }
+            self.send_message(message, addr)
+
+        elif command == "search":
+            key = input("key:")
+            message = {
+                "type": "search",
+                "uuid": self.uuid,
+                "key": key,
+                }
+            self.send_message(message, (network.NETWORK_BROADCAST_ADDR, network.NETWORK_PORT))
         pass
 
     def message_arrived(self, message, addr):
         if message["type"] == "heartbeat_pong":
             self._peer_list.append((message["uuid"],addr))
+                              
+        if message["type"] == "search_response":
+            print("value:",message["value"])
+                              
+            
             
 
             
