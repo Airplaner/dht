@@ -22,22 +22,6 @@ class CLI(network.Network, timer.Timer):
         pass
 
     async def command(self):
-        async def insert(self):
-            message = {
-                "type": "insert",
-                "uuid": self.uuid,
-                "key": key,
-                "value": value,
-                }
-            self.send_message(message, addr)
-            index = (index + 1) % len(self._peer_list)
-            addr = self._peer_list[index][1]
-            self.send_message(message, addr)
-            
-            index = (index + 1) % len(self._peer_list)
-            addr = self._peer_list[index][1]
-            self.send_message(message, addr)
-                
         if len(self._peer_list) == 0:
             print("There are smaller than 3 nodes. Restart CLI")
             exit()
@@ -52,13 +36,28 @@ class CLI(network.Network, timer.Timer):
             value = input("value:")
             
             message = {
-                "type": "search",
+                "type": "delete",
                 "uuid": self.uuid,
                 "key": key,
                 }
+            self.send_message(message, (network.NETWORK_BROADCAST_ADDR, network.NETWORK_PORT))
+            
+            message = {
+                "type": "insert",
+                "uuid": self.uuid,
+                "key": key,
+                "value": value,
+                }
             self.send_message(message, addr)
-            self.async_trigger(self.insert, _TIMEOUT)
-
+            
+            index = (index + 1) % len(self._peer_list)
+            addr = self._peer_list[index][1]
+            self.send_message(message, addr)
+            
+            index = (index + 1) % len(self._peer_list)
+            addr = self._peer_list[index][1]
+            self.send_message(message, addr)
+                
             
         elif command == "search":
             key = input("key:")
