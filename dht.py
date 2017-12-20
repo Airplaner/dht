@@ -111,7 +111,7 @@ class DHT(network.Network, timer.Timer):
         elif message["type"] == "search":
             logging.info("Client request: search")
             message = {
-                "type": "test"
+                "type": "test",
                 "uuid": self.uuid,
             }
             self.send_message(message, addr)

@@ -6,7 +6,7 @@ logging.getLogger().setLevel("DEBUG")
 class CLI(network.Network):
     async def start(self):
         message = {
-            "type": "search"
+            "type": "search",
             "uuid": self.uuid,
         }
         logging.info("cli start send")
