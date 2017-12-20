@@ -4,7 +4,7 @@ import network
 import timer
 import time
 import datetime
-logging.getLogger().setLevel("DEBUG")
+logging.getLogger().setLevel("INFO")
 
 _TIMEOUT = datetime.timedelta(seconds=3)
 _LONG = datetime.timedelta(seconds=5)
