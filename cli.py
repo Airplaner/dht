@@ -7,6 +7,7 @@ import datetime
 logging.getLogger().setLevel("DEBUG")
 
 _TIMEOUT = datetime.timedelta(seconds=3)
+_LONG = datetime.timedelta(seconds=5)
 
 class CLI(network.Network, timer.Timer):
     async def start(self):
@@ -22,7 +23,7 @@ class CLI(network.Network, timer.Timer):
     async def command(self):
         while True:
             if len(self._peer_list) == 0:
-                async_trigger(self.command, _TIMEOUT)
+                print("Fail to load node info.")
                 break
             for i in self._peer_list:
                 print(i)
@@ -58,17 +59,13 @@ class CLI(network.Network, timer.Timer):
         if message["type"] == "search_response":
             print("value:",message["value"])
                               
-            
-            
-
-            
-                
     def __init__(self, loop):
         network.Network.__init__(self, loop)
         self._peer_list = list()
         import uuid
         self.uuid = str(uuid.uuid1())
-        asyncio.ensure_future(self.start(), loop=self._loop)
+        #asyncio.ensure_future(self.start(), loop=self._loop)
+        self.async_period(self.start, _LONG)
         
 
 def main():
