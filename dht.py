@@ -117,16 +117,6 @@ class DHT(network.Network, timer.Timer):
         elif message["type"] == "delete":
             logging.info("Client request: delete")
             pass
-        elif message["type"] == "get_leader":
-            if self._state == self.State.MASER:
-                message = {
-                    "type": "leader"
-                    "uuid": self.uuid,
-                    "timestamp": time.time(),
-                    "peer_list": str(self.context.peer_list)
-                }
-                self.send_message(message, addr)
-            
 
     def master_peer_list_updated(self):
         logging.info("Peer list updated: I'm MASTER with {peers} peers".format(peers=len(self._context.peer_list)))
