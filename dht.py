@@ -111,24 +111,33 @@ class DHT(network.Network, timer.Timer):
                         
         elif message["type"] == "search":
             logging.info("Client request: search")
-            if message["key"] in self._data:
+            m = hashlib.sha512()
+            m.update(message["key"].encode('utf-8'))
+            digest = m.hexdigest()
+            if digest in self._data:
                 response = {
                     "type": "search_response",
                     "uuid": self.uuid,
-                    "value": self._data[message["key"]],
+                    "value": self._data[digest],
                     }
                 self.send_message(response, addr)
             pass
         
         elif message["type"] == "insert":
             logging.info("Client request: insert")
-            self._data[message["key"]] = message["value"]
+            m = hashlib.sha512()
+            m.update(message["key"].encode('utf-8'))
+            digest = m.hexdigest()
+            self._data[digest] = message["value"]
             pass
         
         elif message["type"] == "delete":
             logging.info("Client request: delete")
-            if message["key"] in self._data:
-                self._data.pop(message["key"], None)
+            m = hashlib.sha512()
+            m.update(message["key"].encode('utf-8'))
+            digest = m.hexdigest()
+            if digest in self._data:
+                self._data.pop(digest, None)
             pass
 
     def master_peer_list_updated(self):
