@@ -51,6 +51,15 @@ class CLI(network.Network, timer.Timer):
                 }
             self.send_message(message, (network.NETWORK_BROADCAST_ADDR, network.NETWORK_PORT))
             self.async_trigger(self.fail, _TIMEOUT)
+
+        elif command == "delete":
+            key = input("key:")
+            message = {
+                "type": "delete",
+                "uuid": self.uuid,
+                "key": key,
+                }
+            self.send_message(message, (network.NETWORK_BROADCAST_ADDR, network.NETWORK_PORT))
         pass
 
     async def fail(self):
