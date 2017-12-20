@@ -122,6 +122,7 @@ class DHT(network.Network, timer.Timer):
         
         elif message["type"] == "insert":
             logging.info("Client request: insert")
+            self._data[message["key"]] = message["value"]
             pass
         
         elif message["type"] == "delete":
@@ -286,8 +287,6 @@ class DHT(network.Network, timer.Timer):
         self._loop = loop
         self._context = None
         self._data = dict()
-        self._data["apple"] = "2"
-        self._data["banana"] = "3"
 
         import uuid
         self.uuid = str(uuid.uuid1())

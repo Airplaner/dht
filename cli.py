@@ -22,13 +22,13 @@ class CLI(network.Network, timer.Timer):
         pass
 
     async def command(self):
-        if len(self._peer_list) == 0:
-            print("Fail to load node info. Restart CLI")
+        if len(self._peer_list) < 3:
+            print("There are smaller than 3 nodes. Restart CLI")
             exit()
         for i in self._peer_list:
             print(i)
-        command = input("node index:")
-        addr = self._peer_list[int(command)][1]
+        index = int(input("node index:"))
+        addr = self._peer_list[index][1]
         
         command = input("command:")
         if command == "insert":
@@ -41,7 +41,15 @@ class CLI(network.Network, timer.Timer):
                 "value": value,
                 }
             self.send_message(message, addr)
-
+            
+            index = (index + 1) % len(self._peer_list)
+            addr = self._peer_list[index][1]
+            self.send_message(message, addr)
+            
+            index = (index + 1) % len(self._peer_list)
+            addr = self._peer_list[index][1]
+            self.send_message(message, addr)
+            
         elif command == "search":
             key = input("key:")
             message = {
