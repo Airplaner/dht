@@ -8,6 +8,7 @@ logging.getLogger().setLevel("DEBUG")
 
 _TIMEOUT = datetime.timedelta(seconds=3)
 _LONG = datetime.timedelta(seconds=5)
+_LONG = datetime.timedelta(seconds=1)
 
 class CLI(network.Network, timer.Timer):
     async def start(self):
@@ -21,35 +22,34 @@ class CLI(network.Network, timer.Timer):
         pass
 
     async def command(self):
-        while True:
-            if len(self._peer_list) == 0:
-                print("Fail to load node info.")
-                break
-            for i in self._peer_list:
-                print(i)
-            command = input("node index:")
-            addr = self._peer_list[int(command)]
+        if len(self._peer_list) == 0:
+            print("Fail to load node info.")
+            break
+        for i in self._peer_list:
+            print(i)
+        command = input("node index:")
+        addr = self._peer_list[int(command)]
         
-            command = input("command:")
-            if command == "insert":
-                key = input("key:")
-                value = input("value:")
-                message = {
-                    "type": "insert",
-                    "uuid": self.uuid,
-                    "key": key,
-                    "value": value,
-                    }
-                self.send_message(message, addr)
+        command = input("command:")
+        if command == "insert":
+            key = input("key:")
+            value = input("value:")
+            message = {
+                "type": "insert",
+                "uuid": self.uuid,
+                "key": key,
+                "value": value,
+                }
+            self.send_message(message, addr)
 
-            elif command == "search":
-                key = input("key:")
-                message = {
-                    "type": "search",
-                    "uuid": self.uuid,
-                    "key": key,
-                    }
-                self.send_message(message, (network.NETWORK_BROADCAST_ADDR, network.NETWORK_PORT))
+        elif command == "search":
+            key = input("key:")
+            message = {
+                "type": "search",
+                "uuid": self.uuid,
+                "key": key,
+                }
+            self.send_message(message, (network.NETWORK_BROADCAST_ADDR, network.NETWORK_PORT))
         pass
 
     def message_arrived(self, message, addr):
@@ -65,7 +65,7 @@ class CLI(network.Network, timer.Timer):
         import uuid
         self.uuid = str(uuid.uuid1())
         #asyncio.ensure_future(self.start(), loop=self._loop)
-        self.async_period(self.start, _LONG)
+        self.async_period(self.start, _SHORT)
         
 
 def main():
