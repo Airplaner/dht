@@ -121,6 +121,7 @@ class DHT(network.Network, timer.Timer):
                     "value": self._data[digest],
                     }
                 self.send_message(response, addr)
+                logging.info("search success")
             pass
         
         elif message["type"] == "insert":
@@ -129,6 +130,8 @@ class DHT(network.Network, timer.Timer):
             m.update(message["key"].encode('utf-8'))
             digest = m.hexdigest()
             self._data[digest] = message["value"]
+            logging.info("insertion done")
+            logging.info(str(self._data))
             pass
         
         elif message["type"] == "delete":
@@ -138,6 +141,7 @@ class DHT(network.Network, timer.Timer):
             digest = m.hexdigest()
             if digest in self._data:
                 self._data.pop(digest, None)
+                logging.info("deletion done")
             pass
 
     def master_peer_list_updated(self):

@@ -23,7 +23,7 @@ class CLI(network.Network, timer.Timer):
 
     async def command(self):
         if len(self._peer_list) == 0:
-            print("There are smaller than 3 nodes. Restart CLI")
+            print("Fail to find any node. Restart CLI")
             exit()
         for i in self._peer_list:
             print(i)
